@@ -71,7 +71,52 @@
 		.slider:hover {
 		opacity: 1; /* Fully shown on mouse-over */
 		}
-	
+
+		.column {
+		float: left;
+		width: 50%;
+		}
+
+		.column1-3 {
+		float: left;
+		width: 33.3%;
+		}
+		.column2-3 {
+		float: left;
+		width: 66.6%;
+		}
+
+		.row{
+		  margin-top: 12px;
+		}
+
+		/* Clear floats after the columns */
+		.row:after {
+		content: "";
+		display: table;
+		clear: both;
+		}
+
+		.button {
+		padding: 15px 25px;
+		font-size: 24px;
+		text-align: center;
+		cursor: pointer;
+		outline: none;
+		color: #fff;
+		background-color: #4CAF50;
+		border: none;
+		border-radius: 15px;
+		box-shadow: 0 9px #999;
+		}
+
+		.button:hover {background-color: #3e8e41}
+
+		.button:active {
+		background-color: #3e8e41;
+		box-shadow: 0 5px #666;
+		transform: translateY(4px);
+		}
 
 	</style>
 	<link href="https://fonts.googleapis.com/css?family=Comfortaa&display=swap" rel="stylesheet">
@@ -80,16 +125,51 @@
 	<canvas id="video-canvas"></canvas>
 
   <header>
-Hello
+<h1>The electromagnetic pendulum</h1>
   </header>
 
   <div id="main">
-    <article>Article
 
-<div class="slidecontainer">
-  <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-<p>Value: <span id="demo"></span></p>
+
+
+<article>
+<button class="button">Click Me</button>
+</article>
+
+
+    <article>
+
+<h2> Settings </h2>
+
+<div class="row">
+  <div class="column1-3">Drive (<span id="driveValue"></span>%)</div>
+  <div class="column2-3">
+	<input type="range" min="0" max="100" value="50" class="slider" id="driveParam">
+  </div>
 </div>
+
+<div class="row">
+  <div class="column1-3">Brake (<span id="brakeValue"></span>%)</div>
+  <div class="column2-3">
+	<input type="range" min="0" max="100" value="50" class="slider" id="brakeParam">
+  </div>
+</div>
+
+<div class="row">
+  <div class="column1-3"> Start bump (<span id="startValue"></span>ms)</div>
+  <div class="column2-3">
+	<input type="range" min="1" max="100" value="50" class="slider" id="startParam">
+  </div>
+</div>
+
+<div class="row">
+  <div class="column1-3">Report every <span id="dataValue"></span>ms</div>
+  <div class="column2-3">
+	<input type="range" min="20" max="1000" value="200" class="slider" id="dataParam">
+  </div>
+</div>
+
+
 
 </article>
     <nav></nav>
@@ -140,14 +220,42 @@ Hello
 		var player = new JSMpeg.Player(url, {canvas: canvas});
 
 
-		var slider = document.getElementById("myRange");
-		var output = document.getElementById("demo");
-		output.innerHTML = slider.value; // Display the default slider value
+		var driveSlider = document.getElementById("driveParam");
+		var driveOutput = document.getElementById("driveValue");
+		driveOutput.innerHTML = driveSlider.value; // Display the default slider value
 
 		// Update the current slider value (each time you drag the slider handle)
-		slider.oninput = function() {
-		output.innerHTML = this.value;
-}
+		driveSlider.oninput = function() {
+		driveOutput.innerHTML = this.value;
+		}
+
+		var brakeSlider = document.getElementById("brakeParam");
+		var brakeOutput = document.getElementById("brakeValue");
+		brakeOutput.innerHTML = brakeSlider.value; // Display the default slider value
+
+		// Update the current slider value (each time you drag the slider handle)
+		brakeSlider.oninput = function() {
+		brakeOutput.innerHTML = this.value;
+		}
+
+		var startSlider = document.getElementById("startParam");
+		var startOutput = document.getElementById("startValue");
+		startOutput.innerHTML = startSlider.value; // Display the default slider value
+
+		// Update the current slider value (each time you drag the slider handle)
+		startSlider.oninput = function() {
+		startOutput.innerHTML = this.value;
+		}
+
+		var dataSlider = document.getElementById("dataParam");
+		var dataOutput = document.getElementById("dataValue");
+		dataOutput.innerHTML = dataSlider.value; // Display the default slider value
+
+		// Update the current slider value (each time you drag the slider handle)
+		dataSlider.oninput = function() {
+		dataOutput.innerHTML = this.value;
+		}
+
 
 	</script>
 
