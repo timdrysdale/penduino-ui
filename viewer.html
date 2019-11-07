@@ -122,21 +122,35 @@
 	<link href="https://fonts.googleapis.com/css?family=Comfortaa&display=swap" rel="stylesheet">
 </head>
 <body>
-	<canvas id="video-canvas"></canvas>
 
+<div>
+<canvas id="video-canvas"></canvas>
+</div>
+<div>
+<canvas id="smoothie-chart" width="640" height="120">
+</div>
   <header>
 <h1>The electromagnetic pendulum</h1>
   </header>
 
-  <div id="main">
 
-
-
+  <div id="buttons">
 <article>
 <button class="button">Click Me</button>
+<button class="button">Click Me</button>
+<button class="button">Click Me</button>
+<button class="button">Click Me</button>
+<button class="button">Click Me</button>
+
 </article>
+    <nav></nav>
+    <aside></aside>
+  </div>
 
 
+
+
+  <div id="main">
     <article>
 
 <h2> Settings </h2>
@@ -180,6 +194,7 @@
   </footer>
 
 	<script type="text/javascript" src="jsmpeg.min.js"></script>
+	<script type="text/javascript" src="smoothie.js"></script>
 	<script type="text/javascript">
 		var canvas = document.getElementById('video-canvas');
 
@@ -255,6 +270,13 @@
 		dataSlider.oninput = function() {
 		dataOutput.innerHTML = this.value;
 		}
+
+		var chart = new SmoothieChart({millisPerPixel:11,grid:{fillStyle:'#ffffff'}}),
+		canvas = document.getElementById('smoothie-chart'),
+		series = new TimeSeries();
+
+		chart.addTimeSeries(series, {lineWidth:2,strokeStyle:'#0024ff'});
+		chart.streamTo(canvas, 500);
 
 
 	</script>
