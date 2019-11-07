@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pendulum</title>
+	<style type="text/css">
+		html, body {
+			background-color: #eee;
+			text-align: center;
+		}
+
+		.slidecontainer {
+		width: 100%; /* Width of the outside container */
+		}
+		.slider {
+		-webkit-appearance: none;
+		width: 100%;
+		height: 15px;
+		border-radius: 5px;  
+		background: #d3d3d3;
+		outline: none;
+		opacity: 0.7;
+		-webkit-transition: .2s;
+		transition: opacity .2s;
+		}
+
+		.slider::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		appearance: none;
+		width: 25px;
+		height: 25px;
+		border-radius: 50%; 
+		background: #4CAF50;
+		cursor: pointer;
+		}
+
+		.slider::-moz-range-thumb {
+		width: 25px;
+		height: 25px;
+		border-radius: 50%;
+		background: #4CAF50;
+		cursor: pointer;
+		}
+
+		/* Mouse-over effects */
+		.slider:hover {
+		opacity: 1; /* Fully shown on mouse-over */
+		}
+	
+
+	</style>
+	
+</head>
+<body>
+	<canvas id="video-canvas"></canvas>
+<div class="slidecontainer">
+  <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+<p>Value: <span id="demo"></span></p>
+</div>
+
+
+	<script type="text/javascript" src="jsmpeg.min.js"></script>
+	<script type="text/javascript">
+		var canvas = document.getElementById('video-canvas');
+
+		var urlParams = new URLSearchParams(window.location.search);
+		
+		stream = urlParams.get('stream');
+
+		host = urlParams.get('host');
+
+		port = urlParams.get('port');
+
+		secure = urlParams.get('secure');
+
+		if (host == null) {
+		 host = 'video.practable.io';
+		}
+		
+		if (secure == null) {
+		  scheme = 'ws://'
+		  if (port == null){
+		   port = '8080';
+		  }
+		
+		} else {
+		   scheme = 'wss://'
+		   if (port == null){
+		   port = '443';
+		   }
+		}
+
+		if (port == null){
+		    port = '80'
+		}
+		url = scheme + host + ':' + port + '/' + stream;
+		
+		console.log(url)
+
+		var player = new JSMpeg.Player(url, {canvas: canvas});
+
+
+		var slider = document.getElementById("myRange");
+		var output = document.getElementById("demo");
+		output.innerHTML = slider.value; // Display the default slider value
+
+		// Update the current slider value (each time you drag the slider handle)
+		slider.oninput = function() {
+		output.innerHTML = this.value;
+}
+
+	</script>
+
+
+
+</body>
+</html>
