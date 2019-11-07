@@ -55,7 +55,7 @@
 		width: 25px;
 		height: 25px;
 		border-radius: 50%; 
-		background: #4CAF50;
+		background: #5b7fa5ff; 
 		cursor: pointer;
 		}
 
@@ -63,7 +63,7 @@
 		width: 25px;
 		height: 25px;
 		border-radius: 50%;
-		background: #4CAF50;
+		background: #5b7fa5ff;
 		cursor: pointer;
 		}
 
@@ -117,7 +117,22 @@
 		box-shadow: 0 5px #666;
 		transform: translateY(4px);
 		}
+		
+		#brake       {background-color: #e13131ff;}
+		#brake:hover {background-color: #cc1e1eff;}
 
+		#load        {background-color: #e17a31ff;}
+		#load:hover  {background-color: #cc661eff;}
+
+
+		#free        {background-color:e1b131ff;}
+		#free:hover  {background-color:cc9d1eff;}
+
+
+        #cal         {background-color: #5b7fa5ff;}
+		#cal:hover   {background-color: #46627fff;}
+		
+46627fff
 	</style>
 	<link href="https://fonts.googleapis.com/css?family=Comfortaa&display=swap" rel="stylesheet">
 </head>
@@ -136,11 +151,11 @@
 
   <div id="buttons">
 <article>
-<button class="button">Click Me</button>
-<button class="button">Click Me</button>
-<button class="button">Click Me</button>
-<button class="button">Click Me</button>
-<button class="button">Click Me</button>
+<button id="start" class="button">Start</button>
+<button id="brake" class="button">Brake</button>
+<button id="load" class="button">Load</button>
+<button id="free" class="button">Free</button>
+<button id="cal" class="button">Cal</button>
 
 </article>
     <nav></nav>
@@ -151,7 +166,7 @@
 
 
   <div id="main">
-    <article>
+<article>
 
 <h2> Settings </h2>
 
@@ -195,91 +210,7 @@
 
 	<script type="text/javascript" src="jsmpeg.min.js"></script>
 	<script type="text/javascript" src="smoothie.js"></script>
-	<script type="text/javascript">
-		var canvas = document.getElementById('video-canvas');
-
-		var urlParams = new URLSearchParams(window.location.search);
-		
-		stream = urlParams.get('stream');
-
-		host = urlParams.get('host');
-
-		port = urlParams.get('port');
-
-		secure = urlParams.get('secure');
-
-		if (host == null) {
-		 host = 'video.practable.io';
-		}
-		
-		if (secure == null) {
-		  scheme = 'ws://'
-		  if (port == null){
-		   port = '8080';
-		  }
-		
-		} else {
-		   scheme = 'wss://'
-		   if (port == null){
-		   port = '443';
-		   }
-		}
-
-		if (port == null){
-		    port = '80'
-		}
-		url = scheme + host + ':' + port + '/' + stream;
-		
-		console.log(url)
-
-		var player = new JSMpeg.Player(url, {canvas: canvas});
-
-
-		var driveSlider = document.getElementById("driveParam");
-		var driveOutput = document.getElementById("driveValue");
-		driveOutput.innerHTML = driveSlider.value; // Display the default slider value
-
-		// Update the current slider value (each time you drag the slider handle)
-		driveSlider.oninput = function() {
-		driveOutput.innerHTML = this.value;
-		}
-
-		var brakeSlider = document.getElementById("brakeParam");
-		var brakeOutput = document.getElementById("brakeValue");
-		brakeOutput.innerHTML = brakeSlider.value; // Display the default slider value
-
-		// Update the current slider value (each time you drag the slider handle)
-		brakeSlider.oninput = function() {
-		brakeOutput.innerHTML = this.value;
-		}
-
-		var startSlider = document.getElementById("startParam");
-		var startOutput = document.getElementById("startValue");
-		startOutput.innerHTML = startSlider.value; // Display the default slider value
-
-		// Update the current slider value (each time you drag the slider handle)
-		startSlider.oninput = function() {
-		startOutput.innerHTML = this.value;
-		}
-
-		var dataSlider = document.getElementById("dataParam");
-		var dataOutput = document.getElementById("dataValue");
-		dataOutput.innerHTML = dataSlider.value; // Display the default slider value
-
-		// Update the current slider value (each time you drag the slider handle)
-		dataSlider.oninput = function() {
-		dataOutput.innerHTML = this.value;
-		}
-
-		var chart = new SmoothieChart({millisPerPixel:11,grid:{fillStyle:'#ffffff'}}),
-		canvas = document.getElementById('smoothie-chart'),
-		series = new TimeSeries();
-
-		chart.addTimeSeries(series, {lineWidth:2,strokeStyle:'#0024ff'});
-		chart.streamTo(canvas, 500);
-
-
-	</script>
+	<script type="text/javascript" src="app.js"></script>
 
 
 
