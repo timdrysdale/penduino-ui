@@ -3,9 +3,35 @@
 <head>
 	<title>Pendulum</title>
 	<style type="text/css">
-		html, body {
-			background-color: #eee;
+
+	
+     	html, body {
+			background-color: #fff;
 			text-align: center;
+		    font-family: 'Comfortaa', cursive;
+		}
+
+		#main {
+		display: flex;
+		flex: 1;
+		}
+		#main > article {
+		flex: 1;
+		}
+		#main > nav, 
+		#main > aside {
+		flex: 0 0 20vw;
+		background: white;
+		}
+		#main > nav {
+		order: -1;
+		}
+		header, footer {
+		background: white;
+		height: 5vh;
+		}
+		header, footer, article, nav, aside {
+		padding: 1em;
 		}
 
 		.slidecontainer {
@@ -48,15 +74,30 @@
 	
 
 	</style>
-	
+	<link href="https://fonts.googleapis.com/css?family=Comfortaa&display=swap" rel="stylesheet">
 </head>
 <body>
 	<canvas id="video-canvas"></canvas>
+
+  <header>
+Hello
+  </header>
+
+  <div id="main">
+    <article>Article
+
 <div class="slidecontainer">
   <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
 <p>Value: <span id="demo"></span></p>
 </div>
 
+</article>
+    <nav></nav>
+    <aside></aside>
+  </div>
+  <footer>
+
+  </footer>
 
 	<script type="text/javascript" src="jsmpeg.min.js"></script>
 	<script type="text/javascript">
