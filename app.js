@@ -10,6 +10,8 @@ port = urlParams.get('port');
 
 secure = urlParams.get('secure');
 
+data = urlParams.get('data');
+
 if (host == null) {
 	host = 'video.practable.io';
 }
@@ -30,12 +32,20 @@ if (secure == null) {
 if (port == null){
 	port = '80'
 }
-url = scheme + host + ':' + port + '/' + stream;
 
-console.log(url)
+playerUrl = scheme + host + ':' + port + '/' + stream;
 
-var player = new JSMpeg.Player(url, {canvas: canvas});
+console.log(playerUrl)
 
+var player = new JSMpeg.Player(playerUrl, {canvas: canvas});
+
+dataUrl =  scheme + host + ':' + port + '/' + data;
+
+console.log(dataUrl)
+
+var dataSocket = new WebSocket(dataUrl);
+
+var dataOpen = false;
 
 var driveSlider = document.getElementById("driveParam");
 var driveOutput = document.getElementById("driveValue");
@@ -79,3 +89,17 @@ series = new TimeSeries();
 
 chart.addTimeSeries(series, {lineWidth:2,strokeStyle:'#0024ff'});
 chart.streamTo(canvas, 500);
+
+dataSocket.onopen = function (event) {
+  console.log("dataSocket open");
+  dataOpen = true; 
+};
+
+dataSocket.onmessage = function (event) {
+	//console.log(event.data);
+	try {
+	var obj = JSON.parse(event.data);
+	series.append(new Date().getTime(),obj.enc)
+	} catch (e) {}
+}
+
