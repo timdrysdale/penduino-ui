@@ -2,6 +2,9 @@ var canvas = document.getElementById('video-canvas');
 
 var urlParams = new URLSearchParams(window.location.search);
 
+var delay
+var firstMessage = true
+
 stream = urlParams.get('stream');
 
 host = urlParams.get('host');
@@ -113,7 +116,7 @@ dataSlider.onchange = function() {
 	}));
 }
 
-var chart = new SmoothieChart({millisPerPixel:11,grid:{fillStyle:'#ffffff'}}),
+var chart = new SmoothieChart({millisPerPixel:20,grid:{fillStyle:'#ffffff'}, interpolation:'linear', maxValue:135,minValue:-135,labels:{fillStyle:'#0024ff',precision:0}}), //interpolation:'linear
 canvas = document.getElementById('smoothie-chart'),
 series = new TimeSeries();
 
@@ -143,7 +146,21 @@ dataSocket.onopen = function (event) {
 dataSocket.onmessage = function (event) {
 	try {
 		var obj = JSON.parse(event.data);
-		series.append(new Date().getTime(),obj.enc)
+		var msgTime = obj.time
+        var thisDelay = new Date().getTime() - msgTime
+		if (firstMessage) {
+			delay = thisDelay
+		} else {
+			delay = 0.95 * delay + 0.05 * thisDelay
+		}
+		
+	    //https://stackoverflow.com/questions/4633177/c-how-to-wrap-a-float-to-the-interval-pi-pi
+		var enc = Math.atan2(Math.sin(obj.enc/1200.0 * Math.PI), Math.cos(obj.enc/1200.0 * Math.PI)) / Math.PI * 180
+		enc = Math.min(135, enc)
+		enc = Math.max(-135, enc)
+		series.append(msgTime + delay, enc)
+		//console.log(obj.enc, enc)
+
 	} catch (e) {}
 }
 
