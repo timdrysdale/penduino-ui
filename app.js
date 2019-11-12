@@ -133,7 +133,7 @@ dataSlider.onchange = function() {
 	}));
 }
 
-var chart = new SmoothieChart({millisPerPixel:10,grid:{fillStyle:'#ffffff'}, interpolation:"linear",maxValue:135,minValue:-135,labels:{fillStyle:'#0024ff',precision:0}}), //interpolation:'linear
+var chart = new SmoothieChart({responsive: true, millisPerPixel:10,grid:{fillStyle:'#ffffff'}, interpolation:"linear",maxValue:135,minValue:-135,labels:{fillStyle:'#0024ff',precision:0}}), //interpolation:'linear
 canvas = document.getElementById('smoothie-chart'),
 series = new TimeSeries();
 

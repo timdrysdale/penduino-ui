@@ -70,6 +70,24 @@ header, footer, article, nav, aside {
 	width: 50%;
 }
 
+
+.sliderlabel{ text-align: left;}
+
+.column1-4 {
+	float: left;
+	width: 30%;
+}
+
+.column2-4 {
+	float: left;
+	width: 40%;
+}
+
+.column3-4 {
+	float: left;
+	width: 75%;
+}
+
 .column1-3 {
 	float: left;
 	width: 33.3%;
