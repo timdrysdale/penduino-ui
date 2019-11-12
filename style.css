@@ -115,13 +115,14 @@ header, footer, article, nav, aside {
 	cursor: pointer;
 	outline: none;
 	color: #fff;
-	background-color: #4CAF50;
+
 	border: none;
 	border-radius: 15px;
 	box-shadow: 0 9px #999;
 }
 
-.button:hover {background-color: #3e8e41}
+/*	background-color: #4CAF50;
+ .button:hover {background-color: #3e8e41}*/
 
 .button:active {
 	background-color: #3e8e41;
@@ -129,15 +130,18 @@ header, footer, article, nav, aside {
 	transform: translateY(4px);
 }
 
+
+#start       {background-color: #4CAF50FF;}
+#start:hover {background-color: #3e8e41} 
+
 #brake       {background-color: #e13131ff;}
 #brake:hover {background-color: #cc1e1eff;}
 
 #load        {background-color: #e17a31ff;}
 #load:hover  {background-color: #cc661eff;}
 
-
-#free        {background-color:e1b131ff;}
-#free:hover  {background-color:cc9d1eff;}
+#free        {background-color: #e1b131ff;}
+#free:hover  {background-color: #cc9d1eff;}
 
 
 #cal         {background-color: #5b7fa5ff;}
