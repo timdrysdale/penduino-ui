@@ -56,7 +56,14 @@ dataUrl =  scheme + host + ':' + port + '/' + data;
 
 console.log(dataUrl)
 
-var dataSocket = new WebSocket(dataUrl);
+var wsOptions = {
+	automaticOpen: true,
+	reconnectDecay: 1.5,
+	reconnectInterval: 500,
+	maxReconnectInterval: 10000,
+}
+
+var dataSocket = new ReconnectingWebSocket(dataUrl, null,wsOptions);
 
 var dataOpen = false;
 
@@ -126,12 +133,12 @@ dataSlider.onchange = function() {
 	}));
 }
 
-var chart = new SmoothieChart({millisPerPixel:20,grid:{fillStyle:'#ffffff'}, interpolation:'linear', maxValue:135,minValue:-135,labels:{fillStyle:'#0024ff',precision:0}}), //interpolation:'linear
+var chart = new SmoothieChart({millisPerPixel:10,grid:{fillStyle:'#ffffff'}, interpolation:"linear",maxValue:135,minValue:-135,labels:{fillStyle:'#0024ff',precision:0}}), //interpolation:'linear
 canvas = document.getElementById('smoothie-chart'),
 series = new TimeSeries();
 
 chart.addTimeSeries(series, {lineWidth:2,strokeStyle:'#0024ff'});
-chart.streamTo(canvas, 200);
+chart.streamTo(canvas, 0);
 
 dataSocket.onopen = function (event) {
 	console.log("dataSocket open");
@@ -179,12 +186,19 @@ dataSocket.onmessage = function (event) {
 			enc = enc * 360.0 / encoderPPR 
 		}
 
-		series.append(msgTime + delay, enc)
+		thisTime = msgTime + delay
 		
-		if(debug) {
-			console.log(delay,thisDelay,msgTime, enc)
+		if (!isNaN(thisTime) && !isNaN(enc)){
+			series.append(msgTime + delay, enc)
+			if(debug) {
+				console.log(delay,thisDelay,msgTime, enc)
+			}
 		}
-		
+		else {
+			if (debug) {
+				console.log("NaN so not logging to smoothie",delay,thisDelay,msgTime, enc)
+			}
+		} 
 
 	} catch (e) {
 		if (debug){
