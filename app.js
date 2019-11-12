@@ -2,8 +2,8 @@ var canvas = document.getElementById('video-canvas');
 
 var urlParams = new URLSearchParams(window.location.search);
 
-var delay
-var firstMessage = true
+var delay = 0
+var messageCount = 0
 
 stream = urlParams.get('stream');
 
@@ -14,6 +14,16 @@ port = urlParams.get('port');
 secure = urlParams.get('secure');
 
 data = urlParams.get('data');
+
+debug = urlParams.get('debug');
+
+encoderPPR = urlParams.get('encoderPPR');
+
+if (!encoderPPR){
+	encoderPPR = 2400
+}
+
+wrapEncoder = urlParams.get('wrapEncoder')
 
 if (host == null) {
 	host = 'video.practable.io';
@@ -148,20 +158,39 @@ dataSocket.onmessage = function (event) {
 		var obj = JSON.parse(event.data);
 		var msgTime = obj.time
         var thisDelay = new Date().getTime() - msgTime
-		if (firstMessage) {
-			delay = thisDelay
-		} else {
-			delay = 0.95 * delay + 0.05 * thisDelay
-		}
 		
+		var enc = obj.enc
+
+		if (messageCount == 0){
+			delay = thisDelay
+		}
+
+		thisDelay = ((delay * messageCount) + thisDelay) / (messageCount + 1)
+		
+		messageCount += 1
+
 	    //https://stackoverflow.com/questions/4633177/c-how-to-wrap-a-float-to-the-interval-pi-pi
-		var enc = Math.atan2(Math.sin(obj.enc/1200.0 * Math.PI), Math.cos(obj.enc/1200.0 * Math.PI)) / Math.PI * 180
+		if (wrapEncoder){ //wrap and convert to degrees
+		enc = Math.atan2(Math.sin(obj.enc / (encoderPPR/2) * Math.PI), Math.cos(obj.enc / (encoderPPR/2) * Math.PI)) / Math.PI * 180
 		enc = Math.min(135, enc)
 		enc = Math.max(-135, enc)
-		series.append(msgTime + delay, enc)
-		//console.log(obj.enc, enc)
+		}
+		else{ //convert to degrees only
+			enc = enc * 360.0 / encoderPPR 
+		}
 
-	} catch (e) {}
+		series.append(msgTime + delay, enc)
+		
+		if(debug) {
+			console.log(delay,thisDelay,msgTime, enc)
+		}
+		
+
+	} catch (e) {
+		if (debug){
+			console.log(e)
+		}
+	}
 }
 
 document.getElementById("start").onclick = function(){
