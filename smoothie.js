@@ -93,6 +93,7 @@
  *        next to value, by @jackdesert (#102)
  *        Fix bug rendering issue in series fill when using scroll backwards, by @olssonfredrik
  *        Add title option, by @mesca
+ *        Fix data drop stoppage by rejecting NaNs in append(), by @timdrysdale
  */
 
 ;(function(exports) {
@@ -208,6 +209,10 @@
    * whether it is replaced, or the values summed (defaults to false.)
    */
   TimeSeries.prototype.append = function(timestamp, value, sumRepeatedTimeStampValues) {
+	// Reject NaN
+	if (isNaN(timestamp) || isNaN(value)){
+		return
+	}  
     // Rewind until we hit an older timestamp
     var i = this.data.length - 1;
     while (i >= 0 && this.data[i][0] > timestamp) {
@@ -239,20 +244,17 @@
     this.minValue = isNaN(this.minValue) ? value : Math.min(this.minValue, value);
   };
 
-	TimeSeries.prototype.dropOldData = function(oldestValidTime, maxDataSetLength) {
-		// We must always keep one expired data point as we need this to draw the
-		// line that comes into the chart from the left, but any points prior to that can be removed.
-		var removeCount = 0;
-
-		while (this.data.length - removeCount >= maxDataSetLength && (this.data[removeCount + 1][0] < oldestValidTime || isNaN(this.data[removeCount + 1][0]))){
-		//while (this.data.length - removeCount >= maxDataSetLength && this.data[removeCount + 1][0] < oldestValidTime) {
-			removeCount++;
-		}
-		if (removeCount !== 0) {
-			this.data.splice(0, removeCount);
-		}
-
-	};
+  TimeSeries.prototype.dropOldData = function(oldestValidTime, maxDataSetLength) {
+    // We must always keep one expired data point as we need this to draw the
+    // line that comes into the chart from the left, but any points prior to that can be removed.
+    var removeCount = 0;
+    while (this.data.length - removeCount >= maxDataSetLength && this.data[removeCount + 1][0] < oldestValidTime) {
+      removeCount++;
+    }
+    if (removeCount !== 0) {
+      this.data.splice(0, removeCount);
+    }
+  };
 
   /**
    * Initialises a new <code>SmoothieChart</code>.

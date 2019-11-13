@@ -5,6 +5,9 @@ var urlParams = new URLSearchParams(window.location.search);
 var delay = 0
 var messageCount = 0
 
+var initialSamplingCount = 1200 // 2 mins at 10Hz
+var delayWeightingFactor = 60  // 1 minute drift in 1 hour
+
 stream = urlParams.get('stream');
 
 host = urlParams.get('host');
@@ -17,10 +20,12 @@ data = urlParams.get('data');
 
 debug = urlParams.get('debug');
 
+testNaN = urlParams.get('testNaN');
+
 encoderPPR = urlParams.get('encoderPPR');
 
 if (!encoderPPR){
-	encoderPPR = 2400
+	encoderPPR = 2400 // 2 edges x 2 pulses x 600 advertised ppr
 }
 
 wrapEncoder = urlParams.get('wrapEncoder')
@@ -165,14 +170,30 @@ dataSocket.onmessage = function (event) {
 		var obj = JSON.parse(event.data);
 		var msgTime = obj.time
         var thisDelay = new Date().getTime() - msgTime
-		
+
+		if (testNaN){
+		console.log("appending NaNs")
+		series.append(msgTime + delay, NaN)
+		series.append(NaN, 0)
+		series.append(NaN, NaN)
+		}
+
 		var enc = obj.enc
 
 		if (messageCount == 0){
 			delay = thisDelay
 		}
 
-		thisDelay = ((delay * messageCount) + thisDelay) / (messageCount + 1)
+		
+		a = 1 / delayWeightingFactor
+		b = 1 - a
+
+		
+		if (messageCount < initialSamplingCount) {
+			thisDelay = ((delay * messageCount) + thisDelay) / (messageCount + 1)
+		} else {
+			thisDelay = (delay * b) + (thisDelay * a)
+		}
 		
 		messageCount += 1
 
