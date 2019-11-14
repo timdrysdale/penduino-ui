@@ -22,6 +22,8 @@ debug = urlParams.get('debug');
 
 testNaN = urlParams.get('testNaN');
 
+mobile = urlParams.get('mobile');
+
 encoderPPR = urlParams.get('encoderPPR');
 
 if (!encoderPPR){
@@ -138,7 +140,13 @@ dataSlider.onchange = function() {
 	}));
 }
 
-var chart = new SmoothieChart({responsive: true, millisPerPixel:10,grid:{fillStyle:'#ffffff'}, interpolation:"linear",maxValue:135,minValue:-135,labels:{fillStyle:'#0024ff',precision:0}}), //interpolation:'linear
+if (mobile){
+	responsiveSmoothie= false
+} else {
+	responsiveSmoothie = true
+}
+
+var chart = new SmoothieChart({responsive: responsiveSmoothie, millisPerPixel:10,grid:{fillStyle:'#ffffff'}, interpolation:"linear",maxValue:135,minValue:-135,labels:{fillStyle:'#0024ff',precision:0}}), //interpolation:'linear
 canvas = document.getElementById('smoothie-chart'),
 series = new TimeSeries();
 
